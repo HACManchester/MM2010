@@ -1,0 +1,34 @@
+I hereby challenge all of you.
+
+The challenge?
+
+One program. Every. Day.
+
+For all of March.
+
+
+The Language? Any. I don’t care if you use a magnetic needle to flip
+bits on a hard drive. The Platform? Everything – hell if you can get
+your Dog to say hello world it’ll count.
+
+The rules:
+1. You need to write one program, every day. Duh. Any language. You
+can not duplicate functionality. This means a Hello World in Java is
+fine, but don’t go and make a Hello World in Python afterward.
+2. You need to post the code online. If it’s an embedded project, post
+a picture/video of it working. Post it online on your hackerspace site
+or on a personal blog! Share it with the world.  Our code will be going up on http://fubarlabs.com
+3. Deadlines for other hackerspaces doesn't matter that much, but try
+to post your stuff before midnight to count as "for that day".
+
+That’s it for rules, but… challenge yourself. The “complexity” of
+the code is difficult to judge. There is no rule saying you can’t just
+be clever with LEDs every day. But do something new, challenge
+yourself. There’s no way to regulate this.
+
+Who’s gonna take this on with me?
+
+Let's roll,
+
+Keith Chester
+
