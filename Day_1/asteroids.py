@@ -14,11 +14,18 @@ pygame.init()
 screen = pygame.display.set_mode((640,480))
 
 
+# Make an asteroid shape. This is basically a polygon with randomised vertices
+
+asteroidShape = []
+for i in range(0,10):
+    r = radians(36*i)
+    asteroidShape.append( ( 8*cos(r)+2*random.random()-1,8*sin(r)+2*random.random()-1))
+
 asteroids = []
 for a in range(0,5):
     r = radians(random.randint(0,359))
     asteroids.append([ random.randint(0,639), random.randint(0,479),
-                       2*cos(r), 2*sin(r), 32 ])
+                       2*cos(r), 2*sin(r), 4, random.randint(0,359)])
 
 ship = [ (-8,-8) , (12,0), (-8,8), (0,0)]
 def translate(seq, (x,y)):
@@ -32,6 +39,12 @@ def rotate(seq, degrees):
     r = radians(-degrees)
     for p in seq:   
         output.append((p[0]*cos(r)-p[1]*sin(r),p[0]*sin(r)+p[1]*cos(r)))
+    return output
+
+def scale(seq, amount):
+    output = []
+    for p in seq:   
+        output.append((p[0]*amount,p[1]*amount))
     return output
 
 (shipx,shipy) = (-1,256) # Shipx= -1 is a special value which means
@@ -64,7 +77,7 @@ lives = 4
 while lives > -1:
     screen.fill((0,0,0))
     for a in asteroids:
-        pygame.draw.circle(screen, (0,255,0), (a[0],a[1]),a[4],1)
+        pygame.draw.polygon(screen, (0,255,0), translate(rotate(scale(asteroidShape,a[4]),a[5]),(a[0],a[1])),1)
         a[0] += a[2]
         a[1] += a[3]
         (a[0],a[1]) = clip((a[0],a[1]))
@@ -78,7 +91,8 @@ while lives > -1:
             bullets.remove(b)
 
     keys = pygame.key.get_pressed()
-
+    if(keys[pygame.K_q] or keys[pygame.K_ESCAPE]):
+        lives = -1
     if(shipx >= 0 and timeout<=0 and lives > 0):           
         shipx += shipdx
         shipy += shipdy
@@ -100,8 +114,7 @@ while lives > -1:
     
         (shipx,shipy) = clip((shipx,shipy))
 
-        pygame.draw.polygon(screen, (0,255,0), polyseq, 1)
-        pygame.draw.circle(screen,(255,0,0),(shipx,shipy), 16, 1)
+        pygame.draw.polygon(screen, (255,255,255), polyseq, 1)
     else:
         if(timeout > 0):
             timeout -= 1
@@ -109,7 +122,7 @@ while lives > -1:
             place = True
             # Check we have some space to place the ship in
             for a in asteroids:
-                if(collision((320,256),(a[0],a[1]), a[4]+64)):
+                if(collision((320,256),(a[0],a[1]), a[4]*8+64)):
                     place = False
             if(place):
                 shipx=320 # Place it
@@ -120,24 +133,24 @@ while lives > -1:
     # Finally, collisions
     # Ship / asteroid
     for a in asteroids:
-        if(shipx >=0 and collision((shipx,shipy),(a[0],a[1]), a[4]+16)):
+        if(shipx >=0 and collision((shipx,shipy),(a[0],a[1]), a[4]*8+16)):
             shipx = -1
             timeout = 100
         # bullet / asteroid
         for b in bullets:
-            if(collision((b[0],b[1]),(a[0],a[1]), a[4]+4)):
-                if(a[4] > 8):
+            if(collision((b[0],b[1]),(a[0],a[1]), a[4]*8+4)):
+                if(a[4] > 1):
                     r1 = radians(random.randint(0,359))                
                     r2 = radians(random.randint(0,359))
-                    asteroids.append([a[0],a[1], a[2]+cos(r1),a[3]+sin(r1),a[4]/2])
-                    asteroids.append([a[0],a[1], a[2]+cos(r2),a[3]+sin(r2),a[4]/2])
+                    asteroids.append([a[0],a[1], a[2]+cos(r1),a[3]+sin(r1),a[4]/2,random.randint(0,359)])
+                    asteroids.append([a[0],a[1], a[2]+cos(r2),a[3]+sin(r2),a[4]/2,random.randint(0,359)])
                 asteroids.remove(a)
                 bullets.remove(b)
                 
 
     for l in range(1,lives):
         polyseq = translate(ship,(16*l,16))
-        pygame.draw.polygon(screen, (0,255,0), polyseq, 1)    
+        pygame.draw.polygon(screen, (255,255,255), polyseq, 1)    
     
     pygame.event.pump()
     pygame.display.flip()
