@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+# Rockstorm - Asteroids clone written for the 
+# HACMan March Madness Challenge
+# by Jim MacArthur on 1st March 2010
+
 # System and pygame modules
 import sys, pygame
 import os
@@ -28,6 +32,7 @@ for a in range(0,5):
                        2*cos(r), 2*sin(r), 4, random.randint(0,359)])
 
 ship = [ (-8,-8) , (12,0), (-8,8), (0,0)]
+
 def translate(seq, (x,y)):
     output = []
     for p in seq:
