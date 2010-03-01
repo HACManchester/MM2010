@@ -19,7 +19,8 @@ screen = pygame.display.set_mode((640,480))
 pygame.display.set_caption("Rockstorm")
 
 # Make an rock shape. This is basically a polygon with randomised vertices
-
+# The more random we add, the more rock-like these will appear and the less
+# accurate the collision detection will be.
 rockShape = []
 for i in range(0,10):
     r = radians(36*i)
@@ -33,6 +34,7 @@ for a in range(0,5):
 
 ship = [ (-8,-8) , (12,0), (-8,8), (0,0)]
 
+# Three functions to transform polygons
 def translate(seq, (x,y)):
     output = []
     for p in seq:
