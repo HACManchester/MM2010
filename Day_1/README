@@ -1,0 +1,13 @@
+This is an implementation of the classic 'Asteroids' game in Python with the PyGame library. You'll need a python interpreter, and you can get PyGame from http://www.pygame.org/download.shtml. If you use a common linux distribution, it's better to get 'pygame' through your package manager.
+
+Use the left and right arrow keys to rotate the ship and the up arrow to thrust forwards. Press space to shoot a missile. You can quit by pressing 'q' or escape.
+
+At the moment, there's no score, and the game continues until you run out of lives or destroy all the asteroids, at which point you'll just be left with an empty field. This was written in a couple of hours, so there lots of features left to implement. It's also done all with arrays instead of using any proper object structure, so may be a little difficult to follow.
+
+Some ideas for future improvement:
+     Sound
+     Better collision detection (full polygon testing)
+     Score keeping and multiple levels
+     An animation when asteroids or the ship gets destroyed
+
+Jim MacArthur, 1st March 2010
