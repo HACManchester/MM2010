@@ -6,7 +6,7 @@ import os
 from math import sin,cos,radians
 import random
 # To do:
-# Draw asteroids on both side of the screen if they're across it
+# Draw rocks on both side of the screen if they're across it
 
 
 pygame.init()
@@ -14,17 +14,17 @@ pygame.init()
 screen = pygame.display.set_mode((640,480))
 
 
-# Make an asteroid shape. This is basically a polygon with randomised vertices
+# Make an rock shape. This is basically a polygon with randomised vertices
 
-asteroidShape = []
+rockShape = []
 for i in range(0,10):
     r = radians(36*i)
-    asteroidShape.append( ( 8*cos(r)+2*random.random()-1,8*sin(r)+2*random.random()-1))
+    rockShape.append( ( 8*cos(r)+2*random.random()-1,8*sin(r)+2*random.random()-1))
 
-asteroids = []
+rocks = []
 for a in range(0,5):
     r = radians(random.randint(0,359))
-    asteroids.append([ random.randint(0,639), random.randint(0,479),
+    rocks.append([ random.randint(0,639), random.randint(0,479),
                        2*cos(r), 2*sin(r), 4, random.randint(0,359)])
 
 ship = [ (-8,-8) , (12,0), (-8,8), (0,0)]
@@ -74,15 +74,16 @@ dir = 0
 fireTimeout = 0
 timeout = 0
 lives = 4
+pause = False
 while lives > -1:
     screen.fill((0,0,0))
-    for a in asteroids:
-        pygame.draw.polygon(screen, (0,255,0), translate(rotate(scale(asteroidShape,a[4]),a[5]),(a[0],a[1])),1)
+    for a in rocks:
+        pygame.draw.polygon(screen, (0,255,0), translate(rotate(scale(rockShape,a[4]),a[5]),(a[0],a[1])),1)
         a[0] += a[2]
         a[1] += a[3]
         (a[0],a[1]) = clip((a[0],a[1]))
     for b in bullets:
-        pygame.draw.circle(screen, (255,255,0), (b[0],b[1]),4,1)
+        pygame.draw.circle(screen, (255,255,0), (int(b[0]),int(b[1])),4,1)
         b[0] += b[2]
         b[1] += b[3]
         (b[0],b[1]) = clip((b[0],b[1]))
@@ -93,6 +94,8 @@ while lives > -1:
     keys = pygame.key.get_pressed()
     if(keys[pygame.K_q] or keys[pygame.K_ESCAPE]):
         lives = -1
+    if(keys[pygame.K_p]):
+        pause = True
     if(shipx >= 0 and timeout<=0 and lives > 0):           
         shipx += shipdx
         shipy += shipdy
@@ -121,7 +124,7 @@ while lives > -1:
         else:
             place = True
             # Check we have some space to place the ship in
-            for a in asteroids:
+            for a in rocks:
                 if(collision((320,256),(a[0],a[1]), a[4]*8+64)):
                     place = False
             if(place):
@@ -131,20 +134,20 @@ while lives > -1:
                 shipdy = 0
                 lives -= 1
     # Finally, collisions
-    # Ship / asteroid
-    for a in asteroids:
+    # Ship / rock
+    for a in rocks:
         if(shipx >=0 and collision((shipx,shipy),(a[0],a[1]), a[4]*8+16)):
             shipx = -1
             timeout = 100
-        # bullet / asteroid
+        # bullet / rock
         for b in bullets:
             if(collision((b[0],b[1]),(a[0],a[1]), a[4]*8+4)):
                 if(a[4] > 1):
                     r1 = radians(random.randint(0,359))                
                     r2 = radians(random.randint(0,359))
-                    asteroids.append([a[0],a[1], a[2]+cos(r1),a[3]+sin(r1),a[4]/2,random.randint(0,359)])
-                    asteroids.append([a[0],a[1], a[2]+cos(r2),a[3]+sin(r2),a[4]/2,random.randint(0,359)])
-                asteroids.remove(a)
+                    rocks.append([a[0],a[1], a[2]+cos(r1),a[3]+sin(r1),a[4]/2,random.randint(0,359)])
+                    rocks.append([a[0],a[1], a[2]+cos(r2),a[3]+sin(r2),a[4]/2,random.randint(0,359)])
+                rocks.remove(a)
                 bullets.remove(b)
                 
 
