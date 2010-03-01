@@ -12,7 +12,7 @@ import random
 pygame.init()
 
 screen = pygame.display.set_mode((640,480))
-
+pygame.display.set_caption("Rockstorm")
 
 # Make an rock shape. This is basically a polygon with randomised vertices
 
@@ -77,28 +77,54 @@ lives = 4
 pause = False
 while lives > -1:
     screen.fill((0,0,0))
+
+    # Draw section
     for a in rocks:
         pygame.draw.polygon(screen, (0,255,0), translate(rotate(scale(rockShape,a[4]),a[5]),(a[0],a[1])),1)
-        a[0] += a[2]
-        a[1] += a[3]
-        (a[0],a[1]) = clip((a[0],a[1]))
     for b in bullets:
         pygame.draw.circle(screen, (255,255,0), (int(b[0]),int(b[1])),4,1)
-        b[0] += b[2]
-        b[1] += b[3]
-        (b[0],b[1]) = clip((b[0],b[1]))
-        b[4] -= 1
-        if(b[4]<=0):
-            bullets.remove(b)
 
+    if(shipx >= 0):
+        polyseq = rotate(ship,dir)
+        polyseq = translate(polyseq,(shipx,shipy))
+        pygame.draw.polygon(screen, (255,255,255), polyseq, 1)
+
+    for l in range(1,lives):
+        polyseq = translate(ship,(16*l,16))
+        pygame.draw.polygon(screen, (255,255,255), polyseq, 1)    
+
+
+    # Animation section
+        
+    if not pause:
+        for a in rocks:
+            a[0] += a[2]
+            a[1] += a[3]
+            (a[0],a[1]) = clip((a[0],a[1]))
+        for b in bullets:
+            b[0] += b[2]
+            b[1] += b[3]
+            (b[0],b[1]) = clip((b[0],b[1]))
+            b[4] -= 1
+            if(b[4]<=0):
+                bullets.remove(b)
+        if(shipx >= 0):
+            shipx += shipdx
+            shipy += shipdy
+
+    # Input processing
     keys = pygame.key.get_pressed()
-    if(keys[pygame.K_q] or keys[pygame.K_ESCAPE]):
-        lives = -1
+
     if(keys[pygame.K_p]):
         pause = True
-    if(shipx >= 0 and timeout<=0 and lives > 0):           
-        shipx += shipdx
-        shipy += shipdy
+    if(keys[pygame.K_o]):
+        pause = False
+
+    if(not pause):
+      if(keys[pygame.K_q] or keys[pygame.K_ESCAPE]):
+        lives = -1
+
+      if(shipx >= 0 and timeout<=0 and lives > 0):           
 
         if(keys[pygame.K_LEFT]):
             dir += 4
@@ -110,15 +136,12 @@ while lives > -1:
         if(keys[pygame.K_UP]): # Thrust!
             shipdx += 0.5*cos(radians(dir))
             shipdy -= 0.5*sin(radians(dir))
-        polyseq = rotate(ship,dir)
-        polyseq = translate(polyseq,(shipx,shipy))
 
         if(fireTimeout > 0): fireTimeout -= 1
     
         (shipx,shipy) = clip((shipx,shipy))
 
-        pygame.draw.polygon(screen, (255,255,255), polyseq, 1)
-    else:
+      else:
         if(timeout > 0):
             timeout -= 1
         else:
@@ -133,6 +156,7 @@ while lives > -1:
                 shipdx =0
                 shipdy = 0
                 lives -= 1
+
     # Finally, collisions
     # Ship / rock
     for a in rocks:
@@ -150,11 +174,7 @@ while lives > -1:
                 rocks.remove(a)
                 bullets.remove(b)
                 
-
-    for l in range(1,lives):
-        polyseq = translate(ship,(16*l,16))
-        pygame.draw.polygon(screen, (255,255,255), polyseq, 1)    
-    
+    # End loop and do pygame loop admin
     pygame.event.pump()
     pygame.display.flip()
     clock.tick(50)
