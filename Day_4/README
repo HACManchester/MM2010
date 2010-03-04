@@ -1,0 +1,9 @@
+This is an AVR-GCC program to make an attiny2313 fade an RGB LED through the colour spectrum.
+
+to compile:
+make pwm.hex
+
+to write to AVR:
+avrdude -p t2313 -P /dev/ttyUSB0 -c stk500v2 -U flash:w:pwm.hex
+
+Schematics coming soon!
