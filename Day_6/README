@@ -1,0 +1,11 @@
+These are a couple of scripts designed to make an LED light up if rain is forecast today. raindetector.pl downloads an RSS weather forecast from the BBC and parses it to try and extract the weather for today, or tomorrow if today's forecast is no longer available. It will then call either 'setLED.py 255' or 'setLED.py 0' depending on whether it is forecast to rain or not respectively.
+
+raindetector.pl should be run as a cron job, perhaps hourly.
+
+setLED.py is just a small Python script which sets the output of the PC's parallel port according to the value passed in.
+
+There's no good reason for using both Perl and Python in this project, I just started writing the parser in Perl, and later found the easiest way I could set the parallel port was using Python. The parser could be rewritten in Python quite easily. 
+
+For setLEDs.py to work, the calling user will need to be in the 'lp' group. Run "usermod -a -G lp <user>" as root to add that user to the group. You'll need to log out and back in again.
+
+Jim MacArthur, 6th March 2010
