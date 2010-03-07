@@ -1,3 +1,13 @@
+/*******************************************************************
+ * March Madness - 2010 for HACMan.org.uk - 7th March entry
+ * by Bob "parag0n" Clough (parag0n@ivixor.net)
+ * Code released under the GNU General Public License version 3.0
+ *******************************************************************
+ * This program makes an RGB LED change colour when a hex colour 
+ * code is sent to it over the serial port.
+ *******************************************************************/
+
+
 #define F_CPU 8000000UL
 #define USART_BAUDRATE 9600
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1) 

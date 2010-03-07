@@ -1,4 +1,15 @@
 #!/usr/bin/python
+
+##################################################################
+# March Madness - 2010 for HACMan.org.uk - 7th March entry
+# by Bob "parag0n" Clough (parag0n@ivixor.net)
+# Code released under the GNU General Public License version 3.0
+##################################################################
+# This program sends a rgb colour code chosen by the user to the
+# serial port when.
+##################################################################
+
+
 import pygtk, gtk, sys, serial
 
 def dec2hex(n):
