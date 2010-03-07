@@ -1,3 +1,12 @@
+/*******************************************************************
+ * March Madness - 2010 for HACMan.org.uk - 4th March entry
+ * by Bob "parag0n" Clough (parag0n@ivixor.net)
+ * Code released under the GNU General Public License version 3.0
+ *******************************************************************
+ * This program makes an RGB LED scroll through all the colours.
+ *******************************************************************/
+
+
 #define F_CPU 16000000UL
 
 #include <avr/io.h>
