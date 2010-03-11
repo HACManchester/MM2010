@@ -36,18 +36,9 @@ public function action_plugin_deactivation( $plugin_file )
 //allow our new type to be rendered
 public function action_init()
 {
-	$this->add_template('urlbounce.single', dirname(__FILE__) . '/urlbounce.php');
+	$this->add_template('urlbounce.single', dirname(__FILE__) . '/urlbounce.plugin.php');
 }
  
-//tell habari our type exists!
-public function filter_template_user_filters($filters) {
-	if ( isset($filters['content_type']) ) {
-		$filters['content_type'] = Utils::single_array( $filters['content_type'] );
-		$filters['content_type'][] = Post::type('urlbounce');
-	}
-	return $filters;
-}
-
 // add a url field to the form
 public function action_form_publish($form, $post, $context)
 {
