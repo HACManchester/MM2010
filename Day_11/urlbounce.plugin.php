@@ -10,7 +10,7 @@ class URLBounce extends Plugin
 		return array(
 			'name' => 'URL Bouncer',
 			'version' => '0.1',
-			'url' => 'http://hacman.org.uk',
+			'url' => 'http://hacman.org.uk/urlbounce',
 			'author' => 'Bob Clough',
 			'authorurl' => 'http://thinkl33t.co.uk',
 			'license' => 'Apache License 2.0',
