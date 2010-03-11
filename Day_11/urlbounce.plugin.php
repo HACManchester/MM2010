@@ -36,7 +36,7 @@ public function action_plugin_deactivation( $plugin_file )
 //allow our new type to be rendered
 public function action_init()
 {
-	$this->add_template('urlbounce.single', dirname(__FILE__) . '/urlbounce.plugin.php');
+	$this->add_template('urlbounce.single', dirname(__FILE__) . '/urlbounce.single.php');
 }
  
 // add a url field to the form
