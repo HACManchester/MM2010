@@ -1,0 +1,27 @@
+#!/bin/sh
+
+REPOS="$1"				# repository
+REV="$2"				# revision
+PASSWORD="password"			# password for svn
+PREFIX="project"			# prefix for your zips
+LIVE="/var/www/project"			# live version of your site
+STORE="/var/www/project_zips"		# where to store your zips
+
+# update the live copy, update the changelog
+svn update --password ${PASSWORD} ${LIVE}
+svn log --password ${PASSWORD} -v ${LIVE} > ${LIVE}/ChangeLog
+
+# export to a temp directory
+svn export --password ${PASSWORD} ${LIVE} /tmp/temp_export --force
+cp ${LIVE}/ChangeLog /tmp/temp_export
+
+# zip up our export, put it into the store
+cd /tmp/temp_export
+zip -r ${STORE}/${PREFIX}_svn${REV} ./
+rm -rf /tmp/temp_export/*
+
+# go into the store, remove the latest simlink, link it to the new export
+cd ${STORE}
+rm ${PREFIX}_latest.zip
+ln -s ${PREFIX}_svn${REV}.zip ${PREFIX}_latest.zip
+
