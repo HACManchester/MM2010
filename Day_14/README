@@ -1,0 +1,11 @@
+Looks like everyone was busy with the Maker Faire or Mothers' day today, so I've nocked together a quick demo in processing to fill the gap.
+
+It's a simple animation of a tree which sways in the breeze. The tree is drawn using recursion, and the angle of the branches is altered each frame by a small amount determined by three sine waves at different frequencies to get a slightly random feel to the movement.
+
+You can get processing at http://processing.org, and it's a good way to play about with animations and games without needing to set up or deal with any libraries. You can get it for Windows, Mac OS X and Linux amongst others.
+
+If you haven't dealt with random number generators before, this is a good example of how they work. The branch drawing routine uses a random angle for each branch, but the draw loop seeds the random number generator with the same number each frame. If you seed a random number generator with the same number, the sequence of numbers you get out will always be the same, although they will be difficult to predict. 
+
+The value used to seed the random number generator is itself random, made by a call to random() before the first seeding, so you will get a slightly different tree each time you run the program.
+
+Jim MacArthur, 14th March 2010
