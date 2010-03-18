@@ -1,0 +1,11 @@
+This program will attempt to deciper text which has been ciphered with a simple substitution cipher, that is one in which each letter has been mapped to another one in the alphabet. To use it, try "decipher.pl < ciphertext". It needs a dictionary called 'testdict' in the current directory. One is provided.
+
+You should find if you leave it long enough (~10 minutes on my old AMD 3200+) then something intelligible will emerge. It's a probabalistic algorithm, so it might not get anywhere on its first run (or in fact any of them). The program runs forever, even if it does find the exact plaintext.
+
+It works by doing an initial frequency analysis on the ciphertext, then 'scoring' the deciphered text according to how many letters of a dictionary word each word matches. It then goes into an infinite loop, swapping characters in the cipher and re-scoring the results. Better results get kept for the next iteration.
+
+'ciphertext' is a paragraph from the simple English wikipedia entry on Cryptography. 'ciphertext-bulwer-lytton' is the infamous opening line to "Paul Clifford" by Edward George Bulwer-Lytton.
+
+'testdict' contains the most common 100 words in English, and you will notice that I have cheated by adding words I knew were in the plaintext from both ciphertexts. They're just normal dictionary words, but running this program using the full dictionary makes it incredibly slow due to the naive algorithms in the program. Efficiency and correctness weren't required for the March Madness challenge, so I'll leave those for another day!
+
+Jim MacArthur, 17th March 2010
