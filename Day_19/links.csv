@@ -1,0 +1,7 @@
+http://nas.doghousedean.com:82,DHD-NAS Config Manager
+http://router.doghousedean.com:8081,Draytek 2710n
+http://router.albertandflorence.com:8082/sabnzbd,DHD-NAS NZB Manager
+http://router.albertandflorence.com:82/.wake.php,Wake Up Desktop
+http://colo.doghousedean.com,Colo
+http://google.co.uk,Google
+http://youtube.com,YouTube
