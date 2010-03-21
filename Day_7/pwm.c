@@ -7,7 +7,6 @@
  * code is sent to it over the serial port.
  *******************************************************************/
 
-
 #define F_CPU 8000000UL
 #define USART_BAUDRATE 9600
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1) 
@@ -23,10 +22,10 @@
 #define bit_write(c,p,m) (c ? bit_set(p,m) : bit_clear(p,m))
 #define BIT(x) (0x01 << (x))
 #define LONGBIT(x) ((unsigned long)0x00000001 << (x)) 
+
 #define RED OCR0A
-#define GREEN OCR1AL
-#define BLUE OCR1BL
-#define SPEED 5
+#define BLUE OCR1AL
+#define GREEN OCR1BL
 
 uint8_t cmdpos = 0;
 uint8_t newr = 0;
@@ -84,7 +83,8 @@ int main(void)
 }
 
 ISR(USART_RX_vect) 
-{ 
+{
+	uint8_t invert = 0; 
 	char rx; 
 	rx = UDR;
 	uart_tx(rx);
@@ -112,11 +112,32 @@ ISR(USART_RX_vect)
 	}
 	cmdpos++;
 	if (rx == '#') cmdpos = 0;
+	if (rx == 'i')
+	{
+		uart_tx('\r');
+		uart_tx('\n');
+		uart_tx('I');
+		uart_tx('N');
+		uart_tx('V');
+		uart_tx('\r');
+		uart_tx('\n');
+		invert = !invert;
+		cmdpos = 0;
+	}
 	if (rx == '\r')
 	{
-		RED = newr;
-		GREEN = newg;
-		BLUE = newb;
+		if (!invert)
+		{
+			RED = 255-newr;
+			GREEN = 255-newg;
+			BLUE = 255-newb;
+		}
+		else
+		{
+			RED = newr;
+			GREEN = newg;
+			BLUE = newb;	
+		}
 		cmdpos = 0;
 		uart_tx('\n');
 		uart_tx('O');
