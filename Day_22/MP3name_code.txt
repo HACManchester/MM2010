@@ -1,0 +1,157 @@
+'****************************************************************
+' March Madness - 2010 for HacMan.org.uk - 21st March entry
+' Entry by Paul 'Tallscreen' Plowman    madstunts@hotmail.com
+' Code released under the GNU General Public License version 3.0
+'
+' This Visual Basic 6 code renames MP3's with the title of the
+' song. You can simply run the application, or you can drag MP3
+' files onto the .EXE file
+'
+' Simply create a new project in VB6, add a common dialog control
+' (Press Ctrl-T and make sure there's a tick by "Microsoft Common
+' Dialog Control 6.0" then add the control to the main form) then
+' paste this code into the form's code.
+'
+' This is a massive hack, has very poor error checking, and
+' practically no user feedback, but that's what happens when you
+' try and do something too quickly without reading any specs or
+' anything before you start coding!
+'****************************************************************
+
+Dim head(0 To 1000) As Byte 'Header Data
+
+
+Public Function ValidFilename(ByRef f As String) As String
+'This just replaces any illegal characters in the filename
+  Dim n As Integer
+  Dim s As String
+  ValidFilename = ""
+  For n = 1 To Len(f)
+    s = Mid(f, n, 1)
+    Select Case s
+      Case ">"
+        ValidFilename = ValidFilename & ")"
+      Case "<"
+        ValidFilename = ValidFilename & "("
+      Case """"
+        ValidFilename = ValidFilename & "'"
+      Case ":"
+        ValidFilename = ValidFilename & "."
+      Case "\"
+        ValidFilename = ValidFilename & " - "
+      Case "/"
+        ValidFilename = ValidFilename & " - "
+      Case "*"
+        ValidFilename = ValidFilename & "#"
+      Case "?"
+        ValidFilename = ValidFilename & "."
+      Case Else
+        If (Asc(s) < 129) And (Asc(s) > 31) Then ValidFilename = ValidFilename & s
+      End Select
+    Next n
+ValidFilename = Trim(ValidFilename)
+End Function
+
+
+Function ID3V1(pFile As String) As String
+  Dim d() As Byte
+  Dim n As Byte
+  ID3V1 = ""
+  pLen = FileLen(pFile)
+  ReDim d(pLen)
+  fNum = FreeFile
+  ' Get entire file into d()
+  Open pFile For Binary Access Read Lock Write As fNum 'open file
+   Get fNum, , d() 'Get whole file
+  Close (fNum) 'Close File
+  'Get the title from the end of the file
+  If (Chr(d(pLen - 128)) & Chr(d(pLen - 127)) & Chr(d(pLen - 126))) = "TAG" Then
+    For n = 1 To 30
+      ID3V1 = ID3V1 & Chr(d(pLen - 126 + n))
+      Next n
+    ID3V1 = Trim(ID3V1)
+    End If
+End Function
+
+
+Sub DoIt(C As String)
+' This actually performs the operation on file 'C'
+Dim OutStr As String
+'If file exists and is >1000 bytes
+If ((Dir(C) <> "") And (FileLen(C) > 1000)) Then
+  Open C For Binary Access Read Lock Write As #1 'open file
+   'fill array head() with first 1000 bytes
+   Get #1, , head() 'Get Header
+  Close (1) 'Close File
+  X = 0
+  For n = 1 To 900
+    'If we find the TIT2 tag (through brute force), get start and length of title info
+    'PS. This is a mess. Sorry. :(
+    If (Chr(head(n)) & Chr(head(n + 1)) & Chr(head(n + 2)) & Chr(head(n + 3)) = "TIT2") Then
+      X = n + 11
+      Namelen = head(n + 7)
+      End If
+    Next n
+  'If we found the tag...
+  If (X > 0) Then 'If ID3v2
+    'Get the song title
+    OutStr = ""
+    For n = X To X + Namelen - 2
+      OutStr = OutStr & Chr(head(n))
+      Next n
+    'Call the function to create a valid filename from the song title
+    OutStr = ValidFilename(OutStr)
+     'If original filename was in quotes, remove them
+     If Asc(C) = 34 Then C = Mid(C, 2, Len(C) - 2) 'if C starts with "
+     'Get directory of original filename
+     For n = 1 To Len(C)
+       If Mid(C, n, 1) = "\" Then X = n
+       Next n
+     OutDir = Mid(C, 1, X)
+     'Rename the file
+     If OutStr <> "" Then Name C As OutDir & OutStr & ".mp3"
+   Else 'If ID3v1
+    'Get the title using the function to read ID3v1 tags
+    OutStr = ID3V1(C)
+    If OutStr <> "" Then
+      OutStr = ValidFilename(OutStr)
+      'Get the filename as before
+      If Asc(C) = 34 Then C = Mid(C, 2, Len(C) - 2)
+      For n = 1 To Len(C)
+        If Mid(C, n, 1) = "\" Then X = n
+        Next n
+      OutDir = Mid(C, 1, X)
+      If OutStr <> "" Then Name C As OutDir & OutStr & ".mp3"
+      End If
+    End If
+ Else
+  MsgBox "File doesn't exist or is less than 1000 bytes"
+  End If
+End Sub
+
+
+Private Sub Form_Load()
+Dim strFiles() As String 'array to hold the split files
+C = Command
+'If no commandline filenames, open file-open dialogue
+If C = "" Then
+  With Me.CommonDialog1
+  .Filter = "mp3" 'Set filter to mp3
+  .MaxFileSize = 20000 'Using multi-line, so extend the returnable string size
+  .Flags = cdlOFNExplorer Or cdlOFNAllowMultiselect 'use long filenames
+  .ShowOpen
+  strFiles = Split(.FileName, Chr(0)) ' Split the filenames into the array strFiles()
+  numfiles = UBound(strFiles)
+  If strFiles(0) = .FileName Then
+    'DoIt is the actual function which does the renaming
+    DoIt (.FileName)
+    Else
+      For n = 1 To numfiles
+      DoIt strFiles(0) & "\" & (strFiles(n))
+      Next n
+      End If
+  End With
+  End If
+End
+End Sub
+
