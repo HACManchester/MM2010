@@ -49,6 +49,7 @@ Public Function ValidFilename(ByRef f As String) As String
         If (Asc(s) < 129) And (Asc(s) > 31) Then ValidFilename = ValidFilename & s
       End Select
     Next n
+ValidFilename = Replace(ValidFilename, "  ", " ")
 ValidFilename = Trim(ValidFilename)
 End Function
 
