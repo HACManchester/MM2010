@@ -1,5 +1,5 @@
 '****************************************************************
-' March Madness - 2010 for HacMan.org.uk - 21st March entry
+' March Madness - 2010 for HacMan.org.uk - 22nd March entry
 ' Entry by Paul 'Tallscreen' Plowman    madstunts@hotmail.com
 ' Code released under the GNU General Public License version 3.0
 '
@@ -151,6 +151,25 @@ If C = "" Then
       Next n
       End If
   End With
+ Else
+    inquote = 0
+  Filen = ""
+  C = C & " "
+  For n = 1 To Len(C)
+    Select Case Mid(C, n, 1)
+      Case """"
+        inquote = 1 - inquote
+      Case " "
+        If inquote Then
+          Filen = Filen & " "
+         Else
+          If Filen <> "" Then DoIt (Filen)
+          Filen = ""
+          End If
+      Case Else
+        Filen = Filen & Mid(C, n, 1)
+    End Select
+    Next n
   End If
 End
 End Sub
