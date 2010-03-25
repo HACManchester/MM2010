@@ -17,7 +17,7 @@ This has happened to me quite a few times, so I've created this bookmarklet to h
 Create a new bookmark on your links bar with a title like "Tabloid Check" or something.
 In the "Location" or "URL" box, copy and paste this...
 
-javascript:(function(){L=location.href;X=L.substring((L.lastIndexOf(%22/%22))+1,L.indexOf(%22.htm%22));X=X.replace(/breaking-news-/i,%22%22);X=X.replace(/-/g,%22+%22);window.location=%22http://www.google.com/search?q=%22+X;})()
+javascript:(function(){L=location.href;X=L.substring((L.lastIndexOf(%22/%22))+1,L.indexOf(%22.htm%22));X=X.replace(/breaking-news-/i,%22%22);X=X.replace(/-/g,%22+%22);X=X.replace(/_/g,%22+%22);window.location=%22http://www.google.com/search?q=%22+X;})()
 
 
 
