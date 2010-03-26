@@ -30,6 +30,7 @@ foreach my $letter (@alphabet)
       $data .= $line;
     }
 
+    # We have to decode UTF-8 data otherwise SimpleLinkExtor complains.
     $data = decode_utf8($data);
 
     close HTML_FILE;
@@ -44,6 +45,7 @@ my $csv = '"Station Name","Code","Longitude","Latitude"' . "\n";
 
 foreach my $url (@all_urls)
 {
+  # Only look at links if they end in "_railway_station" or "_station"
   if ($url =~ m#^/wiki/(.*?)(_railway_station|_station)$#)
   {
     my $station = $1;
