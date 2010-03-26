@@ -1,0 +1,23 @@
+Script for extracting the station name, code, latitude and longitude of all
+UK railway stations from the English version of Wikipedia, where this data
+exists (at the time of writing, 487 stations are missing this metadata).
+This data is dumped to STDOUT in CSV format, which can then be converted
+into SQL, a HTML table etc. through piping to another script.
+
+This script assumes you have already run the scraper from Day 16 of March
+Madness, which downloads all the relevant HTML files. In theory these two
+scripts could be combined, as they share the same loop code.
+
+All of the packages required by this script should be installed by default
+if you have a standard copy of Perl 5 with libwww-perl. The only exception
+is HTML::SimpleLinkExtor which will need to be installed manually via CPAN.
+
+You may need to modify the path to Perl if you are running this script under
+Windows or FreeBSD.
+
+For details of any of the module function calls, see http://search.cpan.org
+for full documentation.
+
+Licensed under the MIT Licence - see the LICENCE file for full details.
+
+Any questions, email paul@xk7.net.
