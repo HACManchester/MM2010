@@ -9,7 +9,9 @@
 # of the screen to an RGB sphere every second!  Yaay!
 ##################################################################
 
-import gtk.gdk threading serial
+import gtk.gdk
+import threading
+import serial
 
 def get_colour():
 	w = gtk.gdk.get_default_root_window()
