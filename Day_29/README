@@ -1,0 +1,21 @@
+Script for creating a sitemap.xml file from a given web site.
+
+Usage: ./xml-sitemap.pl 'http://www.example.org/'
+
+N.B. You should quote the URL which you wish to create a sitemap for to
+prevent your shell from treating characters as shell commands.
+
+All of the packages required by this script should be installed by default
+if you have a standard copy of Perl 5 with libwww-perl. The only exceptions
+are HTML::SimpleLinkExtor which will need to be installed manually via CPAN,
+and DateTime which can usually be found in your package manager.
+
+You may need to modify the path to Perl if you are running this script under
+Windows or FreeBSD.
+
+For details of any of the module function calls, see http://search.cpan.org
+for full documentation.
+
+Licensed under the MIT Licence - see the LICENCE file for full details.
+
+Any questions, email paul@xk7.net.
