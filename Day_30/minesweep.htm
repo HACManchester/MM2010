@@ -1,0 +1,205 @@
+<!--
+
+March Madness - 2010 for HacMan.org.uk - 30th March entry
+Entry by Paul 'Tallscreen' Plowman    madstunts@hotmail.com
+Code released under the GNU General Public License version 3.0
+
+This is an implementation of Minesweeper in Javascript.
+
+There's no timer or little flags because I got sick of looking
+at the code. They should be fairly easy to implement.
+
+You need to unzip images.zip, and put the images in the same
+directory as this file.
+
+ -->
+
+<html>
+<head>
+ <title>Minesweeper</title>
+<script type="text/javascript">
+
+
+// These are the width & height of the board
+var w = 10;
+var h = 10;
+
+// Are we playing, or is the game over?
+var playing = 0;
+
+// This is the size of the tiles
+var picsize = 18;
+
+// How many mines?
+var mines = 15;
+
+// This array holds the position of the mines
+var g = new Array(w+2);
+for (i=0 ; i<(w+2) ; i++)
+  g[i] = new Array(h+2);
+
+// Load the images
+var iB = new Image;
+iB.src = "blank.gif";
+var iM = new Image;
+iM.src = "mine.gif";
+var iXM = new Image;
+iXM.src = "xmine.gif";
+var i0 = new Image;
+i0.src = "0.gif";
+var i1 = new Image;
+i1.src = "1.gif";
+var i2 = new Image;
+i2.src = "2.gif";
+var i3 = new Image;
+i3.src = "3.gif";
+var i4 = new Image;
+i4.src = "4.gif";
+var i5 = new Image;
+i5.src = "5.gif";
+var i6 = new Image;
+i6.src = "6.gif";
+var i7 = new Image;
+i7.src = "7.gif";
+var i8 = new Image;
+i8.src = "8.gif";
+
+// This basically draws the grid using an html table
+function setup()
+  {
+  document.write('<table border=0 cellspacing=0 cellpadding=0><tr><td><img src="topleft.gif"></td><td><img src="ac.gif" height=5 width='+(w*picsize)+'></td><td><img src="topright.gif"></td></tr>');
+  document.write('<tr><td><img src="up.gif" width=5 height='+(h*picsize)+'></td><td>');
+  for (y=1; y<=h; y++)
+    {
+    for (x=1; x<=w; x++) document.write('<a href="Javascript:ms('+x+','+y+');"><img border=0 src="blank.gif" name="g'+x+'|'+y+'"></a>');
+    document.writeln('<br>');
+    }
+  document.write('</td><td><img src="up.gif" width=5 height='+(h*picsize)+'></td></tr>');
+  document.write('<tr><td><img src="bottomleft.gif"></td><td><img src="ac.gif" height=5 width='+(w*picsize)+'></td><td><img src="bottomright.gif"></td></tr></table>');
+  }
+
+
+// This resets the screen, and places the mines randomly
+function reset()
+  {
+  var bombs=mines;
+  for (y=0; y<(h+2); y++)
+    {
+    for (x=0; x<(w+2); x++)
+      {
+      g[x][y]=0;
+      if ((x>0)&&(y>0)&&(x<=w)&&(y<=h)) document['g'+x+'|'+y].src = iB.src;
+      }
+    }
+  while (bombs>0)
+    {
+    x=Math.ceil(Math.random()*w);
+    y=Math.ceil(Math.random()*h);
+    if (g[x][y]==0)
+      {
+      g[x][y]=1;
+      bombs--;
+      }
+    }
+  playing = 1;
+  }
+
+// This tests the square for surrounding bombs, and if there
+// are none it recursively tests the surrounding squares
+// Otherwise it prints the number of surrounding bombs (score)
+function test(x,y)
+  {
+  var score = 0;
+  var dx = 0;
+  var dy = 0;
+  if ((x>0)&&(y>0)&&(x<=w)&&(y<=h)&&(document['g'+x+'|'+y].src == iB.src))
+    {
+    score=g[x-1][y-1]+g[x][y-1]+g[x+1][y-1]+g[x-1][y]+g[x+1][y]+g[x-1][y+1]+g[x][y+1]+g[x+1][y+1];
+    document['g'+x+'|'+y].src = eval('i'+score+'.src');
+    if (score==0)
+      {
+      for (dy=y-1; dy<=y+1; dy++)
+        {
+        for (dx=x-1; dx<=x+1; dx++)
+          {
+          test(dx,dy);
+          }
+        }
+      }
+    }
+  }
+
+// This counts up the squares which are not blank
+// If the total equals w*h (all of them) then the player has won
+function won()
+  {
+  var nonblank = 0;
+  var x;
+  var y;
+  for (y=1; y<=h; y++)
+    for (x=1; x<=w; x++)
+      if ((g[x][y]==1)||(document['g'+x+'|'+y].src != iB.src))
+        {
+        nonblank++;
+        }
+  if (nonblank==w*h)
+    {
+    return true;
+    }
+   else
+    {
+    return false;
+    }
+  }
+
+
+// This tests if the player has clicked on a mine, and if not, it then calls 'test'
+function ms(xx,yy)
+  {
+  if (playing == 1)
+    {
+    if (g[xx][yy]==1)
+      {
+      for (y=1; y<=h; y++) for (x=1; x<=w; x++) if (g[x][y]==1) document['g'+x+'|'+y].src = iM.src;
+      document['g'+xx+'|'+yy].src = iXM.src;
+      alert('Ka-Blammm!\nYou are utterly and unquestionably dead!');
+      playing = 0;
+      }
+     else
+      {
+      if (document['g'+xx+'|'+yy].src == iB.src)
+        {
+        test(xx,yy);
+        if (won())
+          {
+          for (y=1; y<=h; y++)
+            for (x=1; x<=w; x++)
+              if (g[x][y]==1) document['g'+x+'|'+y].src = iM.src;
+          alert('You won the game!\nCongratulations, you flukey git!');
+          playing = 0;
+          }
+        }
+      }
+    }
+   else
+    {
+    reset()
+    }
+  window.focus();
+  }
+</script>
+
+</head>
+
+<body bgcolor="#000000" style="margin: 0px" marginwidth=0 marginheight=0>
+<center>
+<table border=0 height=100% valign=middle cellpadding=0 cellspacing=0><tr><td>
+  <script type="text/javascript">
+  setup();
+  reset();
+  </script>
+</td></tr></table>
+</center>
+</body>
+</html>
+
