@@ -15,4 +15,7 @@ perl -e 'print "Hello from Perl\n"'
 echo '#include <iostream>' > hello.cpp
 echo 'int main() { std::cout << "Hello from C++\n"; return 0;}' >> hello.cpp
 g++ -o hello hello.cpp && ./hello
-
+# Java
+echo 'class Hello { public static void main(String[] args) { System.out.println("Hello from Java"); }}' > hello.java
+javac hello.java
+java Hello
