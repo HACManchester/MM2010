@@ -8,6 +8,7 @@ php -r 'echo "Hello from PHP\n";' 2>/dev/null
 echo '#include <stdio.h>' > hello.c
 echo 'int main() { printf("Hello from c\n"); return 0;}' >> hello.c
 gcc -o hello hello.c && ./hello
+rm hello.c hello
 # Ruby
 echo 'print "Hello from Ruby\n"' | ruby
 perl -e 'print "Hello from Perl\n"'
@@ -15,7 +16,13 @@ perl -e 'print "Hello from Perl\n"'
 echo '#include <iostream>' > hello.cpp
 echo 'int main() { std::cout << "Hello from C++\n"; return 0;}' >> hello.cpp
 g++ -o hello hello.cpp && ./hello
+rm hello.cpp hello
 # Java
 echo 'class Hello { public static void main(String[] args) { System.out.println("Hello from Java"); }}' > hello.java
 javac hello.java
 java Hello
+rm hello.java Hello.class
+# brainfuck
+echo '++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<---------.++++++++++++.---.--.>.<<------.>+++++.-----------------.++++++++.+++++.--------.+++++++++++++++.------------------.++++++++.>+.>.' > hello.bf
+bf hello.bf
+rm hello.bf
