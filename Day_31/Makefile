@@ -1,14 +1,15 @@
 SHELL = /bin/sh
 JAVAC = javac
+HASKELL = ghc
 
-files = chello cpphello Hello.class
+target_files = chello cpphello Hello.class hshello
 
 .SUFFIXES:
 .SUFFIXES: .c .o .java .class
 
-.PHONY: clean
+.PHONY: clean run
 
-all: $(files)
+all: $(target_files)
 
 chello: hello.c
 	$(CC) -c $< -o $@
@@ -19,6 +20,8 @@ cpphello: hello.cpp
 Hello.class: Hello.java
 	$(JAVAC) $<
 
-clean:
-	-rm -f $(files)
+hshello: hello.hs
+	$(HASKELL) -o $@ $<
 
+clean:
+	-rm -f $(target_files)
