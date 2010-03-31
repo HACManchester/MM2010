@@ -26,3 +26,9 @@ rm hello.java Hello.class
 echo '++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<---------.++++++++++++.---.--.>.<<------.>+++++.-----------------.++++++++.+++++.--------.+++++++++++++++.------------------.++++++++.>+.>.' > hello.bf
 bf hello.bf
 rm hello.bf
+# BASIC
+yabasic -e 'PRINT "Hello from BASIC"'
+# Haskell
+echo 'main = putStrLn "Hello from Haskell"' > hello.hs
+ghc -o hello hello.hs && ./hello
+rm hello.hs hello.hi hello.o hello
